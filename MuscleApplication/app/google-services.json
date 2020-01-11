@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "893508180765",
+    "firebase_url": "https://musclefirebase.firebaseio.com",
+    "project_id": "musclefirebase",
+    "storage_bucket": "musclefirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893508180765:android:d693d309d6a56b676a5ff4",
+        "android_client_info": {
+          "package_name": "shuhei.muscleapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893508180765-e9h0tc73f1632b91uhokckj5omtrsnc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRsS900hankKmjzYtSwh-mXW6nIt5jrOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893508180765-e9h0tc73f1632b91uhokckj5omtrsnc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
