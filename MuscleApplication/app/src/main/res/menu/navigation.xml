@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/muscle_logo"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/muscle"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/navigation_match"
+        android:icon="@drawable/muscle"
+        android:title="@string/match" />
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/muscle"
+        android:title="@string/chat" />
+    <item
+        android:id="@+id/navigation_award"
+        android:icon="@drawable/muscle"
+        android:title="@string/award" />
+</menu>

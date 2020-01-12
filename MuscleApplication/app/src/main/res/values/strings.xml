@@ -32,4 +32,11 @@
     <string name="login_error_title">Error</string>
     <string name="signup_error_message">Please make sure you enter email address and password</string>
     <string name="signup_error_title">Error</string>
+    <string name="profile">Profile</string>
+    <string name="match">Match</string>
+    <string name="chat">Chat</string>
+    <string name="award">Award</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
