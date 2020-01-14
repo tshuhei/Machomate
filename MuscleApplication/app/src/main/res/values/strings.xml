@@ -40,4 +40,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name">Name</string>
+    <string name="protein_des">An essential macronutrient that helps build muscle, repair tissue, and make enzymes and hormones.</string>
+    <string name="organic_protein_des">Non-GMO Vegan Protein powder made with a complete profile of all the essential amino acids along</string>
+    <string name="eaa_des">Provides the specialized nutrients your body needs to repair existing muscle tissue and build new muscle tissue</string>
+    <string name="bcaa_des">Taken in order to boost muscle growth and enhance exercise performance.</string>
+    <string name="creatine_des">Helps your muscles produce energy during heavy lifting or high-intensity exercise</string>
+    <string name="glutamine_des">important amino acid with many functions in the body building block of protein and critical part of the immune system</string>
+    <string name="hmb_des">needed by the body to protect and repair muscle tissue</string>
+    <string name="wrist_wrap_des">to provide support to the wrist joint during heavy or max effort lifts</string>
+    <string name="training_tube_des">lightweight, portable and durable. Effective when used alone, or with handles and anchors.</string>
+    <string name="lifting_belt_des">designed to help brace your lower back and core during strength training exercises like deadlifts and squats</string>
+    <string name="energy_drink_des">An Energy Drink</string>
+    <string name="ab_roller_des">Ab-Roller</string>
+    <string name="push_up_bars_des">Push-Up Bars</string>
 </resources>
