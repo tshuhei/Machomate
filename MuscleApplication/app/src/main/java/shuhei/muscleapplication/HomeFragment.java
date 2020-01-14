@@ -3,15 +3,27 @@ package shuhei.muscleapplication;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -33,6 +45,9 @@ public class HomeFragment extends Fragment {
     //private FirebaseAuth mFirebaseAuth;
     //private FirebaseUser mFirebaseUser;
     private String[] nameList;
+    private List<UserItem> userList;
+    private Context context;
+    private CustomAdapter customAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -40,6 +55,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     public HomeFragment() {
         // Required empty public constructor
+        userList = new ArrayList<UserItem>();
     }
 
     /**
@@ -74,11 +90,67 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         nameList = new String[]{"Alex", "Shuhei", "Keita", "Mariko", "Iori"};
+        context = view.getContext();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String gender = (String) dataSnapshot.child("items").child("gender").getValue();
+                String height = (String) dataSnapshot.child("items").child("height").getValue();
+                String introduction = (String) dataSnapshot.child("items").child("introduction").getValue();
+                String nickName = (String) dataSnapshot.child("items").child("nickName").getValue();
+                String userType = (String) dataSnapshot.child("items").child("userType").getValue();
+                String weight = (String) dataSnapshot.child("items").child("userType").getValue();
+                String workoutExperience = (String) dataSnapshot.child("items").child("workoutExperience").getValue();
+                String userId = (String) dataSnapshot.child("items").child("userId").getValue();
+                UserItem userItem = new UserItem(userType,gender,workoutExperience,height,weight,nickName,introduction,userId);
+                userList.add(userItem);
+                customAdapter = new CustomAdapter(context, userList);
+                userListView.setAdapter(customAdapter);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         userListView = (ListView)view.findViewById(R.id.userListView);
-        CustomAdapter customAdapter = new CustomAdapter(view.getContext(), nameList);
+        customAdapter = new CustomAdapter(context,userList);
         userListView.setAdapter(customAdapter);
+        userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView id = (TextView)view.findViewById(R.id.id);
+                String userId = id.getText().toString();
+                Log.d("userId",userId);
+                UserProfileFragment userProfileFragment = new UserProfileFragment(userId);
+                FragmentManager fm = getChildFragmentManager();
+                fm.beginTransaction().add(R.id.childLayout,userProfileFragment).commit();
+                userListView.setEnabled(false);
+                userListView.setVisibility(View.INVISIBLE);
+            }
+        });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

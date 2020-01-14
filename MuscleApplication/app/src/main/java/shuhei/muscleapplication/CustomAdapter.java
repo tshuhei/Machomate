@@ -7,20 +7,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class CustomAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
-    private String[] nameList;
+    private List<UserItem> userList;
 
-    public CustomAdapter(Context applicationContext, String[] nameList){
+    public CustomAdapter(Context applicationContext, List<UserItem> userList){
         this.context = context;
         inflater = LayoutInflater.from(applicationContext);
-        this.nameList = nameList;
+        this.userList = userList;
     }
 
     @Override
     public int getCount() {
-        return nameList.length;
+        return userList.size();
     }
 
     @Override
@@ -40,8 +42,15 @@ public class CustomAdapter extends BaseAdapter {
         TextView gender = (TextView)view.findViewById(R.id.gender);
         TextView workoutExperience = (TextView)view.findViewById(R.id.workoutExperience);
         TextView height = (TextView)view.findViewById(R.id.height);
-        TextView Weight = (TextView)view.findViewById(R.id.weight);
-        name.setText(nameList[i]);
+        TextView weight = (TextView)view.findViewById(R.id.weight);
+        TextView id = (TextView)view.findViewById(R.id.id);
+        UserItem userItem = userList.get(i);
+        name.setText(userItem.getNickName());
+        gender.setText(userItem.getGender());
+        workoutExperience.setText(userItem.getWorkoutExperience());
+        height.setText(userItem.getHeight());
+        weight.setText(userItem.getWeight());
+        id.setText(userItem.getUserId());
         return view;
     }
 }

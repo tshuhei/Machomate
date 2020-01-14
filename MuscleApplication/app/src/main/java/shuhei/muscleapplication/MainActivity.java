@@ -18,7 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
-MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener, RewardFragment.OnFragmentInteractionListener{
+MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener, RewardFragment.OnFragmentInteractionListener
+,UserProfileFragment.OnFragmentInteractionListener{
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;

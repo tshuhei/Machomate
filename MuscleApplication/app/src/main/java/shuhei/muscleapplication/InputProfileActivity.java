@@ -61,13 +61,8 @@ public class InputProfileActivity extends AppCompatActivity {
                     Log.println(0,"login","user not login");
                 }else{
                     mUserId = mFirebaseUser.getUid();
-                    mDatabase.child("users").child(mUserId).child("items").child("usertype").setValue(strUserType);
-                    mDatabase.child("users").child(mUserId).child("items").child("gender").setValue(strGender);
-                    mDatabase.child("users").child(mUserId).child("items").child("experience").setValue(strWorkoutExperience);
-                    mDatabase.child("users").child(mUserId).child("items").child("height").setValue(strHeight);
-                    mDatabase.child("users").child(mUserId).child("items").child("weight").setValue(strWeight);
-                    mDatabase.child("users").child(mUserId).child("items").child("nickname").setValue(strNickname);
-                    mDatabase.child("users").child(mUserId).child("items").child("introduction").setValue(strIntroduction);
+                    UserItem userItem = new UserItem(strUserType, strGender, strWorkoutExperience, strHeight, strWeight, strNickname, strIntroduction, mUserId);
+                    mDatabase.child("users").child(mUserId).child("items").setValue(userItem);
                 }
 
                 loadImputPhotoView();
