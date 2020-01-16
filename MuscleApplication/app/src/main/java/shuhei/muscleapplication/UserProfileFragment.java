@@ -3,13 +3,22 @@ package shuhei.muscleapplication;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
@@ -30,8 +39,14 @@ public class UserProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String userId;
-    private Button button;
-    private TextView userProfile;
+    private DatabaseReference mDatabase;
+    private TextView genderValue;
+    private TextView workoutExperienceValue;
+    private TextView heightValue;
+    private TextView weightValue;
+    private TextView introductionValue;
+    private TextView name;
+    private ImageView likeButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -72,15 +87,59 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        button = (Button)view.findViewById(R.id.button);
-        userProfile = (TextView)view.findViewById(R.id.userProfile);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        name = (TextView)view.findViewById(R.id.name);
+        genderValue = (TextView)view.findViewById(R.id.gender_value);
+        workoutExperienceValue = (TextView)view.findViewById(R.id.workoutExperience_value);
+        heightValue = (TextView)view.findViewById(R.id.height_value);
+        weightValue = (TextView)view.findViewById(R.id.weight_value);
+        introductionValue = (TextView)view.findViewById(R.id.introduction_value);
+        likeButton = (ImageView)view.findViewById(R.id.likeButton);
+        mDatabase.child("users").child(userId).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onClick(View view) {
-                userProfile.setText(userId);
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String gender =(String) dataSnapshot.child("gender").getValue();
+                String namevalue = (String) dataSnapshot.child("nickName").getValue();
+                String workoutExperience = (String) dataSnapshot.child("workoutExperience").getValue();
+                String weight = (String)dataSnapshot.child("weight").getValue();
+                String height = (String)dataSnapshot.child("height").getValue();
+                String introduction = (String)dataSnapshot.child("introduction").getValue();
+                name.setText(namevalue);
+                genderValue.setText(gender);
+                workoutExperienceValue.setText(workoutExperience);
+                heightValue.setText(height);
+                weightValue.setText(weight);
+                introductionValue.setText(introduction);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
+
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("like", "Likeしたんご！");
+            }
+        });
+
         return view;
     }
 

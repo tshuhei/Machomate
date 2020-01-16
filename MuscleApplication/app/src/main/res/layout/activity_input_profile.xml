@@ -157,8 +157,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:maxLines="5" />
+                android:inputType="textMultiLine|textPersonName"
+                android:maxLines="10"
+                android:singleLine="false" />
 
         </LinearLayout>
     </ScrollView>

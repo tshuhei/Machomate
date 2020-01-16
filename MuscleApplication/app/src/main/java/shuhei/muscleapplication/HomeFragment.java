@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,8 +44,8 @@ public class HomeFragment extends Fragment {
     private ListView userListView;
     private DatabaseReference mDatabase;
     private String mUserId;
-    //private FirebaseAuth mFirebaseAuth;
-    //private FirebaseUser mFirebaseUser;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
     private String[] nameList;
     private List<UserItem> userList;
     private Context context;
@@ -89,6 +91,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
         nameList = new String[]{"Alex", "Shuhei", "Keita", "Mariko", "Iori"};
         context = view.getContext();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -104,6 +108,7 @@ public class HomeFragment extends Fragment {
                 String workoutExperience = (String) dataSnapshot.child("items").child("workoutExperience").getValue();
                 String userId = (String) dataSnapshot.child("items").child("userId").getValue();
                 UserItem userItem = new UserItem(userType,gender,workoutExperience,height,weight,nickName,introduction,userId);
+                if(userId == )
                 userList.add(userItem);
                 customAdapter = new CustomAdapter(context, userList);
                 userListView.setAdapter(customAdapter);
