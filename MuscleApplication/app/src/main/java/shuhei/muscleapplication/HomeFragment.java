@@ -96,6 +96,8 @@ public class HomeFragment extends Fragment {
         nameList = new String[]{"Alex", "Shuhei", "Keita", "Mariko", "Iori"};
         context = view.getContext();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase.child("users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -108,8 +110,12 @@ public class HomeFragment extends Fragment {
                 String workoutExperience = (String) dataSnapshot.child("items").child("workoutExperience").getValue();
                 String userId = (String) dataSnapshot.child("items").child("userId").getValue();
                 UserItem userItem = new UserItem(userType,gender,workoutExperience,height,weight,nickName,introduction,userId);
-                if(userId == )
-                userList.add(userItem);
+                if(mFirebaseUser != null){
+                    String u = mFirebaseUser.getUid();
+                    if(!userId.equals(u)){
+                        userList.add(userItem);
+                    }
+                }
                 customAdapter = new CustomAdapter(context, userList);
                 userListView.setAdapter(customAdapter);
             }

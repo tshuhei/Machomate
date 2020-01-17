@@ -44,4 +44,7 @@
     <string name="gender_is">Gender:</string>
     <string name="workoutExperience_is">Experience:</string>
     <string name="introduction_is">Introduction:</string>
+    <string name="pick_image">Choose your profile photo</string>
+    <string name="rationale">You have to tap \"Permit\" to choose your profile photo</string>
+    <string name="permission_deny">This app need permission to pick the profile photo from this device</string>
 </resources>

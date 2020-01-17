@@ -3,7 +3,6 @@ package shuhei.muscleapplication;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -39,6 +43,7 @@ public class UserProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String userId;
+    private String mUserId;
     private DatabaseReference mDatabase;
     private TextView genderValue;
     private TextView workoutExperienceValue;
@@ -47,6 +52,10 @@ public class UserProfileFragment extends Fragment {
     private TextView introductionValue;
     private TextView name;
     private ImageView likeButton;
+    private List<String> userLikedUserId;
+    private List<String> myLikeUserId;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,6 +97,9 @@ public class UserProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mUserId = mFirebaseUser.getUid();
         name = (TextView)view.findViewById(R.id.name);
         genderValue = (TextView)view.findViewById(R.id.gender_value);
         workoutExperienceValue = (TextView)view.findViewById(R.id.workoutExperience_value);
@@ -95,6 +107,32 @@ public class UserProfileFragment extends Fragment {
         weightValue = (TextView)view.findViewById(R.id.weight_value);
         introductionValue = (TextView)view.findViewById(R.id.introduction_value);
         likeButton = (ImageView)view.findViewById(R.id.likeButton);
+        mDatabase.child("users").child(mUserId).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                myLikeUserId = (List<String>)dataSnapshot.child("likeUserId").getValue();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         mDatabase.child("users").child(userId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -104,6 +142,7 @@ public class UserProfileFragment extends Fragment {
                 String weight = (String)dataSnapshot.child("weight").getValue();
                 String height = (String)dataSnapshot.child("height").getValue();
                 String introduction = (String)dataSnapshot.child("introduction").getValue();
+                userLikedUserId = (List<String>)dataSnapshot.child("likedUserId").getValue();
                 name.setText(namevalue);
                 genderValue.setText(gender);
                 workoutExperienceValue.setText(workoutExperience);
@@ -136,7 +175,21 @@ public class UserProfileFragment extends Fragment {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("like", "Likeしたんご！");
+                //Log.d("like", "Likeしたんご！");
+                if(userLikedUserId == null){
+                    userLikedUserId = new ArrayList<String>();
+                }
+                if(myLikeUserId == null){
+                    myLikeUserId = new ArrayList<String>();
+                }
+                if(!userLikedUserId.contains(mUserId)){
+                    userLikedUserId.add(mUserId);
+                }
+                if(!myLikeUserId.contains(userId)){
+                    myLikeUserId.add(userId);
+                }
+                mDatabase.child("users").child(mUserId).child("items").child("likeUserId").setValue(myLikeUserId);
+                mDatabase.child("users").child(userId).child("items").child("likedUserId").setValue(userLikedUserId);
             }
         });
 

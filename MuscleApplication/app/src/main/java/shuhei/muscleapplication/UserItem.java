@@ -1,5 +1,8 @@
 package shuhei.muscleapplication;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserItem {
     private String userType;
     private String gender;
@@ -9,9 +12,9 @@ public class UserItem {
     private String nickName;
     private String Introduction;
     private String userId;
-    private String[] likedUserId;
-    private String[] likeUserId;
-    private String[] matchUserId;
+    private List<String> likedUserId;
+    private List<String> likeUserId;
+    private List<String> matchUserId;
 
     public UserItem(){
 
@@ -27,6 +30,9 @@ public class UserItem {
         this.nickName = nickName;
         this.Introduction = Introduction;
         this.userId = userId;
+        likedUserId = new ArrayList<String>();
+        likeUserId = new ArrayList<String>();
+        matchUserId = new ArrayList<String>();
     }
 
     public String getUserType() {
@@ -85,27 +91,27 @@ public class UserItem {
         Introduction = introduction;
     }
 
-    public String[] getLikedUserId() {
+    public List<String> getLikedUserId() {
         return likedUserId;
     }
 
-    public void setLikedUserId(String[] likedUserId) {
+    public void setLikedUserId(List<String> likedUserId) {
         this.likedUserId = likedUserId;
     }
 
-    public String[] getLikeUserId() {
+    public List<String> getLikeUserId() {
         return likeUserId;
     }
 
-    public void setLikeUserId(String[] likeUserId) {
+    public void setLikeUserId(List<String> likeUserId) {
         this.likeUserId = likeUserId;
     }
 
-    public String[] getMatchUserId() {
+    public List<String> getMatchUserId() {
         return matchUserId;
     }
 
-    public void setMatchUserId(String[] matchUserId) {
+    public void setMatchUserId(List<String> matchUserId) {
         this.matchUserId = matchUserId;
     }
 

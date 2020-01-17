@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,14 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
 MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener, RewardFragment.OnFragmentInteractionListener
@@ -23,6 +32,11 @@ MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionL
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabase;
+    private List<String> matchList;
+    private List<String> likeUserList;
+    private List<String> likedUserList;
+    private String mUserId;
     BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
 
@@ -31,6 +45,12 @@ MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = findViewById(R.id.toolbar);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        if(mFirebaseUser != null){
+            mUserId = mFirebaseUser.getUid();
+        }
         setSupportActionBar(toolbar);
         setTitle(R.string.home);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -52,7 +72,7 @@ MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionL
                         return true;
                     case R.id.navigation_match:
                         toolbar.setTitle("Match");
-                        fragment = new MatchFragment();
+                        fragment = new MatchFragment(matchList);
                         loadFragment(fragment);
                         return true;
                     case R.id.navigation_chat:
@@ -70,6 +90,49 @@ MatchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionL
                 return true;
             }
         };
+        if(mUserId != null){
+            mDatabase.child("users").child(mUserId).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    likeUserList = (List<String>)dataSnapshot.child("likeUserId").getValue();
+                    likedUserList = (List<String>)dataSnapshot.child("likedUserId").getValue();
+                    if(likeUserList == null){
+                        likeUserList = new ArrayList<String>();
+                    }
+                    if(likedUserList == null){
+                        likedUserList = new ArrayList<String>();
+                    }
+                    matchList = new ArrayList<String>();
+                    int size = likeUserList.size();
+                    for(int i=0; i<size;i++){
+                        if(likedUserList.contains(likeUserList.get(i))){
+                            matchList.add(likeUserList.get(i));
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
