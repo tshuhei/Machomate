@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,10 +18,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ImputPhotoActivity extends AppCompatActivity {
@@ -29,6 +36,9 @@ public class ImputPhotoActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 2;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageReference;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private String mUserId;
     ImageView profilePhoto;
 
     @Override
@@ -38,7 +48,11 @@ public class ImputPhotoActivity extends AppCompatActivity {
         setTitle(R.string.choosephoto);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mStorageReference = mFirebaseStorage.getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mUserId = mFirebaseUser.getUid();
+        mStorageReference = mFirebaseStorage.getReference().child(mUserId).child("profile.jpg");
+
         profilePhoto = (ImageView)findViewById(R.id.profilePhoto);
         done = (Button)findViewById(R.id.done);
 
@@ -110,6 +124,25 @@ public class ImputPhotoActivity extends AppCompatActivity {
                 }
                 {
                     //upload profile image to Firebase
+                    profilePhoto.setDrawingCacheEnabled(true);
+                    profilePhoto.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable)profilePhoto.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bytes = baos.toByteArray();
+
+                    UploadTask uploadTask = mStorageReference.putBytes(bytes);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    });
                 }
             }
         }

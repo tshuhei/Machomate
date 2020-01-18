@@ -15,6 +15,15 @@ public class UserItem {
     private List<String> likedUserId;
     private List<String> likeUserId;
     private List<String> matchUserId;
+    private byte[] profilePhoto;
+
+    public byte[] getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(byte[] profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 
     public UserItem(){
 
@@ -33,6 +42,7 @@ public class UserItem {
         likedUserId = new ArrayList<String>();
         likeUserId = new ArrayList<String>();
         matchUserId = new ArrayList<String>();
+        this.profilePhoto = profilePhoto;
     }
 
     public String getUserType() {

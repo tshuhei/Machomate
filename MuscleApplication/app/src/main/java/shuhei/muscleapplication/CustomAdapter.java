@@ -15,7 +15,7 @@ public class CustomAdapter extends BaseAdapter {
     private List<UserItem> userList;
 
     public CustomAdapter(Context applicationContext, List<UserItem> userList){
-        this.context = context;
+        this.context = applicationContext;
         inflater = LayoutInflater.from(applicationContext);
         this.userList = userList;
     }
@@ -45,6 +45,7 @@ public class CustomAdapter extends BaseAdapter {
         TextView weight = (TextView)view.findViewById(R.id.weight);
         TextView id = (TextView)view.findViewById(R.id.id);
         UserItem userItem = userList.get(i);
+        String userId = userItem.getUserId();
         name.setText(userItem.getNickName());
         gender.setText(userItem.getGender());
         workoutExperience.setText(userItem.getWorkoutExperience());
